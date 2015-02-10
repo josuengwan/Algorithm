@@ -12,9 +12,9 @@ using namespace std;
 string sort_this(string& s){
 	vector<string> mainstr;
 	for(int i=0; i<s.size();i+=2)
-		mainstr.push_back(s.substr(i,2));
+		mainstr.push_back(s.substr(i,2));       //문자열 2개씩 분리하기
 
-	for(int i = 0; i< mainstr.size();++i){
+	for(int i = 0; i< mainstr.size();++i){     //sort
 		for(int j= i;j<mainstr.size();++j){
 			if(mainstr[i]>mainstr[j])
 				swap(mainstr[i],mainstr[j]);
@@ -22,7 +22,7 @@ string sort_this(string& s){
 	}
 
 	string result;
-	for(int i=0;i<mainstr.size();++i){
+	for(int i=0;i<mainstr.size();++i){       //합치기
 		result +=mainstr[i];
 	}
 	return result;
