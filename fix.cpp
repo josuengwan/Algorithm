@@ -1,5 +1,5 @@
 //
-// fix.c
+// fix.cpp
 // fix by algospot.com
 // 
 // Created by SeungWan Jo on 2015. 2.9.
