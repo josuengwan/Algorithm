@@ -3,7 +3,7 @@
 // ENCRYPT by algospot.com
 // 
 // Created by SeungWan Jo on 2015. 2.12.
-// 
+// error: segmentation fault, probably incorrect memory access or stack overflow
 #include <iostream>
 #include <string.h>
 
