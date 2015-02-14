@@ -13,6 +13,7 @@ int main(){
 	int T;
 	cin>>T;
 	char s[101];
+	memset(s,0,sizeof(s));
 	char r[60];
 	memset(r,0,sizeof(r));       //r√ ±‚»≠
 	int k=0;
