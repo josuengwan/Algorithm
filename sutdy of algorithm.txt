@@ -1,0 +1,443 @@
+SLL
+
+typedef struct tagNode
+{
+	int data;
+	struct tagNode* NextNode;
+} Node;
+
+/*노드 생성*/
+Node* SLL_CreateNode(ElementType NewData)
+{
+	Node* NewNode = (Node*)malloc(sizeof(Node));
+	
+	NewNode->Data = NewData;
+	NewNode->NextNode = NULL;
+	
+	return NewNode;
+}
+
+/*노드 소멸*/
+void SLL_DestoryNode(Node* Node)
+{
+	free(Node);
+}
+
+/*노드 추가*/
+void SLL_AppendNode(Node** Head, Node* NewNode)
+{
+	/* 헤드노드가 NULL이라면 새로운 노드가 Head */
+	if((*Head)==NULL)
+	{
+		*Head = NewNode;
+	}
+	else
+	{
+		/*테일을 찾아NewNode를 연결한다*/
+		Node* Tail = (*Head);
+		while(Tail->NextNode !=NULL)
+		{
+			Tail=Tail->NextNode;
+		}
+
+		Tail->NextNode = NewNode;
+	}
+}
+
+Example)
+
+Node* List = NULL;
+Node* NewNode =NULL;
+
+NewNode= SLL_CreateNode(117); /*자유저장소에 노드생성*/
+SLL_AppendNode(&List,NewNode); /*생성한 노드를 List에 추가*/
+
+NewNode= SLL_CreateNode(119); /*자유저장소에 또 다른 노드생성*/
+SLL_AppendNode(&List, NewNode); /*생성한 노드를 List에 추가 */
+
+
+/*노드 탐색 */
+Node* SLL_GetNodeAt(Node* Head, int Location)
+{
+	Node* Current = Head;
+	
+	while ( Current != NULL && (--Location)>=0)
+	{
+		Current = Current->NextNode;
+	}
+
+	return Current;
+}
+
+Ex)
+Node* List = NULL;
+Node* MyNode= NULL;
+
+SLL_AppendNode(&List, SLL_CreatNode(117));
+SLL_AppendNode(&List, SLL_CreatNode(119));
+
+MyNode = SLL_GetNodeAt(List,1); /*두번째 노드의 주소를 저장 */
+printf("%d\n",MyNode->Data); /* 119 output */
+
+/*노드 삭제*/
+void SLL_RemoveNode(Node** Head, Node* Remove)
+{
+	if(*Head == Remove)
+	{
+		*Head = Remove->NextNode;
+	}
+	else
+	{
+		Node* Current = *Head;
+		while(Current != NULL && Current->NextNode != Remove)
+		{
+			Current = Current->NextNode;
+		}
+	
+		if (Current != NULL)
+			Current->NextNode=Remove->NextNode;
+	}
+}
+
+Ex)
+Node* List = NULL;
+Node* MyNode=NULL;
+
+SLL_AppendNode(&List, SLL_CreateNode(117));
+SLL_appendNode(&List, SLL_CreateNode(119));
+SLL_appendNode(&List, SLL_CreateNode(229));
+
+MyNode = SLL_GetNodeAt(List,1)
+printf("%d\n", MyNode->Data);
+
+SLL_RemoveNode(&List,MyNode); //두번째 노드 제거
+
+SLL_DestroyNode(MyNode); //링크드 리스트에서 제거한 노드를 메모리에서 완전히 소멸
+
+/*노드 수 세기 */
+int SLL_GetNodeCount(Node* Head)
+{
+	int Count =0;
+	Node* Current = Head;
+	
+	while(Current != NULL)
+	{
+		Current = Current->NextNode;
+		Count++;
+	}
+	
+	return Count;
+}
+
+--------DLL----------------------------------------
+#include "DoublyLinkedList.h"
+
+/*  노드 생성 */
+Node* DLL_CreateNode( ElementType NewData )
+{
+    Node* NewNode = (Node*)malloc(sizeof(Node));
+
+    NewNode->Data = NewData;
+    NewNode->PrevNode = NULL;
+    NewNode->NextNode = NULL;
+
+    return NewNode;
+}
+
+/*  노드 소멸 */
+void DLL_DestroyNode( Node* Node )
+{
+    free(Node);
+}
+
+/*  노드 추가 */
+void DLL_AppendNode( Node** Head, Node* NewNode )
+{
+    /*  헤드 노드가 NULL이라면 새로운 노드가 Head */
+    if ( (*Head) == NULL ) 
+    {
+        *Head = NewNode;
+    } 
+    else
+    {
+        /*  테일을 찾아 NewNode를 연결한다. */
+        Node* Tail = (*Head);
+        while ( Tail->NextNode != NULL )
+        {
+            Tail = Tail->NextNode;
+        }
+
+        Tail->NextNode = NewNode;
+        NewNode->PrevNode = Tail; /*  기존의 테일을 새로운 테일의 PrevNode가 가리킨다. */
+    }
+}
+
+/*  노드 삽입 */
+void DLL_InsertAfter( Node* Current, Node* NewNode )
+{
+    NewNode->NextNode = Current->NextNode;
+    NewNode->PrevNode = Current;
+
+    if ( Current->NextNode != NULL )
+    {
+        Current->NextNode->PrevNode = NewNode;
+    Current->NextNode = NewNode;
+    }
+}
+
+/*  노드 제거 */
+void DLL_RemoveNode( Node** Head, Node* Remove )
+{
+    if ( *Head == Remove )
+    {
+        *Head = Remove->NextNode;
+        if ( (*Head) != NULL )
+            (*Head)->PrevNode = NULL;
+        
+        Remove->PrevNode = NULL;
+        Remove->NextNode = NULL;
+    }
+    else
+    {
+        Node* Temp = Remove;
+
+        if ( Remove->PrevNode != NULL )
+            Remove->PrevNode->NextNode = Temp->NextNode;
+
+        if ( Remove->NextNode != NULL )
+            Remove->NextNode->PrevNode = Temp->PrevNode;
+
+        Remove->PrevNode = NULL;
+        Remove->NextNode = NULL;
+    }    
+}
+
+/*  노드 탐색 */
+Node* DLL_GetNodeAt( Node* Head, int Location )
+{
+    Node* Current = Head;
+
+    while ( Current != NULL && (--Location) >= 0)
+    {
+        Current = Current->NextNode;
+    }
+
+    return Current;
+}
+
+/*  노드 수 세기 */
+int DLL_GetNodeCount( Node* Head )
+{
+    unsigned int  Count = 0;
+    Node*         Current = Head;
+
+    while ( Current != NULL )
+    {
+        Current = Current->NextNode;
+        Count++;
+    }
+
+    return Count;
+}
+
+void PrintNode( Node* _Node )
+{
+    if ( _Node->PrevNode == NULL )
+        printf("Prev: NULL");
+    else
+        printf("Prev: %d", _Node->PrevNode->Data);
+
+    printf(" Current: %d ", _Node->Data);
+
+    if ( _Node->NextNode == NULL )
+        printf("Next: NULL\n");
+    else
+        printf("Next: %d\n", _Node->NextNode->Data);
+}
+
+--------------CircularDoublyLinkedList------------------------------
+/*  노드 생성 */
+Node* CDLL_CreateNode(ElementType NewData)
+{
+    Node* NewNode = (Node*)malloc(sizeof(Node));
+
+    NewNode->Data = NewData;
+    NewNode->PrevNode = NULL;
+    NewNode->NextNode = NULL;
+
+    return NewNode;
+}
+
+/*  노드 소멸 */
+void CDLL_DestroyNode(Node* Node)
+{
+    free(Node);
+}
+
+/*  노드 추가 */
+void CDLL_AppendNode(Node** Head, Node* NewNode)
+{
+    /*  헤드 노드가 NULL이라면 새로운 노드가 Head */
+    if ( (*Head) == NULL ) 
+    {
+        *Head = NewNode;
+        (*Head)->NextNode = *Head;
+        (*Head)->PrevNode = *Head;
+    } 
+    else
+    {
+        /*  테일과 헤드 사이에 NewNode를 삽입한다. */
+        Node* Tail = (*Head)->PrevNode;
+        
+        Tail->NextNode->PrevNode = NewNode;
+        Tail->NextNode = NewNode;
+
+        NewNode->NextNode = (*Head);
+        NewNode->PrevNode = Tail; /*  기존의 테일을 새로운  */
+                                  /*  테일의 PrevNode가 가리킨다. */
+    }
+}
+
+/*  노드 삽입 */
+void CDLL_InsertAfter(Node* Current, Node* NewNode)
+{
+    NewNode->NextNode = Current->NextNode;
+    NewNode->PrevNode = Current;
+
+    if ( Current->NextNode != NULL )
+    {
+        Current->NextNode->PrevNode = NewNode;
+        Current->NextNode = NewNode;
+    }
+}
+
+/*  노드 제거 */
+void CDLL_RemoveNode(Node** Head, Node* Remove)
+{
+    if ( *Head == Remove )
+    {
+        (*Head)->PrevNode->NextNode = Remove->NextNode;
+        (*Head)->NextNode->PrevNode = Remove->PrevNode;
+
+        *Head = Remove->NextNode;
+        
+        Remove->PrevNode = NULL;
+        Remove->NextNode = NULL;
+    }
+    else
+    {
+/*
+        Node* Temp = Remove;
+
+        Remove->PrevNode->NextNode = Temp->NextNode;
+        Remove->NextNode->PrevNode = Temp->PrevNode;
+*/
+        Remove->PrevNode->NextNode = Remove->NextNode;
+        Remove->NextNode->PrevNode = Remove->PrevNode;
+
+        Remove->PrevNode = NULL;
+        Remove->NextNode = NULL;
+    }    
+}
+
+/*  노드 탐색 */
+Node* CDLL_GetNodeAt(Node* Head, int Location)
+{
+    Node* Current = Head;
+
+    while ( Current != NULL && (--Location) >= 0)
+    {
+        Current = Current->NextNode;
+    }
+
+    return Current;
+}
+
+/*  노드 수 세기 */
+int CDLL_GetNodeCount(Node* Head)
+{
+    unsigned int  Count = 0;
+    Node*         Current = Head;
+
+    while ( Current != NULL )
+    {
+        Current = Current->NextNode;
+        Count++;
+
+        if ( Current == Head )
+            break;
+    }
+
+    return Count;
+}
+
+void PrintNode(Node* _Node)
+{
+    if ( _Node->PrevNode == NULL )
+        printf("Prev: NULL");
+    else
+        printf("Prev: %d", _Node->PrevNode->Data);
+
+    printf(" Current: %d ", _Node->Data);
+
+    if ( _Node->NextNode == NULL )
+        printf("Next: NULL\n");
+    else
+        printf("Next: %d\n", _Node->NextNode->Data);
+}
+
+
+----------------------ArrayStack-----------------------------
+void  AS_CreateStack(ArrayStack** Stack, int Capacity)
+{
+    /*  스택을 자유저장소에 생성 */
+    (*Stack)           = (ArrayStack*)malloc(sizeof(ArrayStack));
+
+    /*  입력된 Capacity만큼의 노드를 자유저장소에 생성 */
+    (*Stack)->Nodes    = (Node*)malloc(sizeof(Node)*Capacity);
+
+    /*  Capacity 및 Top 초기화 */
+    (*Stack)->Capacity = Capacity;
+    (*Stack)->Top = 0;
+}
+
+void AS_DestroyStack(ArrayStack* Stack)
+{
+    /*  노드를 자유 저장소에서 해제 */
+    free(Stack->Nodes);
+
+    /*  스택을 자유 저장소에서 해제 */
+    free(Stack);
+}
+
+void AS_Push(ArrayStack* Stack, ElementType Data)
+{
+    int Position = Stack->Top;
+
+    Stack->Nodes[Position].Data = Data;
+    Stack->Top++;
+}
+
+ElementType AS_Pop(ArrayStack* Stack)
+{
+    int Position = --( Stack->Top );
+
+    return Stack->Nodes[Position].Data;
+}
+
+ElementType AS_Top(ArrayStack* Stack)
+{
+    int Position = Stack->Top - 1;
+
+    return Stack->Nodes[Position].Data;
+}
+
+int AS_GetSize(ArrayStack* Stack)
+{
+    return Stack->Top;
+}
+
+int AS_IsEmpty(ArrayStack* Stack)
+{
+    return (Stack->Top == 0);
+}
