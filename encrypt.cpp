@@ -2,41 +2,44 @@
 // encrypt.cpp
 // ENCRYPT by algospot.com
 // 
-// Created by SeungWan Jo on 2015. 2.12.
-// error: segmentation fault, probably incorrect memory access or stack overflow
-#include <iostream>
+// Created by SeungWan Jo on 2015. 3.02.
+// 
+#include <stdio.h>
 #include <string.h>
+int T; // 테스트 케이스 개수
+char originalString[101]; // 100개의 문자열
+char cryptString[101];
+// HelloWorld = 10 / 5
+void initString(){
 
-using namespace std;
-
+}
 int main(){
-	int T;
-	cin>>T;
-	char s[101];
-	memset(s,0,sizeof(s));
-	char r[60];
-	memset(r,0,sizeof(r));       //r초기화
-	int k=0;
-	if(1<=T && T<=10){
-		for(int i=0;i<T;i++){
-			scanf("%s",s);
-			int half;
-			if(strlen(s)%2==0) half=(strlen(s)/2);
-			if(strlen(s)%2!=0) half=(strlen(s)/2)+1;
-		
-			for(int j=0;j<strlen(s);j++){
-				if(j==0) r[j]=s[j];
-				if(j%2==0){
-					r[j-k]=s[j];
-				}
-				if(j%2!=0){
-					r[half+k]=s[j];
-					k++;
-				}
-			}
-			cout<<r<<endl;
-		}
-	}
-	else cin>>T;
-	return 0;
+    int index;
+    int strIndex,maxLength;
+    int midIndex;
+    scanf("%d",&T);
+    for(index=0;index<T;index++){
+        int cryptIndex=0;
+        memset(originalString,0, strlen(originalString));
+        memset(cryptString,0, strlen(cryptString));
+        
+        scanf("%s",originalString);
+        maxLength = (int)strlen(originalString);
+        if(maxLength%2==0)
+            midIndex = maxLength/2;
+        else
+            midIndex = maxLength/2+1;
+        
+        for (strIndex=0; strIndex<maxLength; strIndex++) {
+            if(strIndex%2==0){
+                cryptString[cryptIndex++]=originalString[strIndex];
+            }else{
+                // 1
+                cryptString[midIndex+cryptIndex-1] = originalString[strIndex];
+            }
+        }
+        printf("%s\n",cryptString);
+    }
+    
+    return 0;
 }
